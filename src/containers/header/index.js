@@ -32,12 +32,11 @@ const Header = () => {
       <div className="container">
         <div className="header-row">
           <Link to="/">Logo</Link>
-          {userAuth ?
+          {userAuth &&
             <>
               <p>{userAuth.userName}</p>
               <Link onClick={onLogout} to="logout" className="user">Logout</Link>
-            </> :
-            null}
+            </> }
         </div>
       </div>
     </header>

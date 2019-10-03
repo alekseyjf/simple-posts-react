@@ -31,7 +31,7 @@ const Articles = ({articles}) => {
           return (
             <div key={created_ad} className="col-12 article">
               <Link className="title-post" to={created_ad}>{title}</Link>
-              <p>{description}</p>
+              <p className="post-desc">{description}</p>
               <div className="row">
                 <div className="col-6">{author}</div>
                 <div className="col-6">{readDate}</div>

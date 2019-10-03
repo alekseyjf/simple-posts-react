@@ -8,3 +8,8 @@
 .create-ad {
   margin: 20px auto;
 }
+
+.post-desc {
+  white-space: pre-line;
+  overflow: hidden;
+}

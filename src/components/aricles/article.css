@@ -8,4 +8,8 @@
 }
 .title-post {
   font-size: 32px;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  overflow: hidden;
+  display: inline-block;
 }

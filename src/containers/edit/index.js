@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import {UserContext} from "../context";
 import {Redirect, withRouter} from "react-router-dom";
 
-const Edit = (props) => {
+const Edit = props => {
   const {history} = props;
   const [state, setState] = useContext(UserContext)
   const {userAuth, articles, users} = state;
@@ -10,6 +10,7 @@ const Edit = (props) => {
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
   const [check, setCheck] = useState(false);
+  const [checkEmpty, setCheckEmpty] = useState(false);
 
   const onChangeTitle = (e) => {
     setTitle(e.target.value)
@@ -21,10 +22,16 @@ const Edit = (props) => {
 
   const onSubmitArticle = (e) => {
     e.preventDefault();
+
+    if (title.trim() === '' || desc.trim() === '') {
+      return setCheckEmpty(true)
+    }
+    setCheckEmpty(false);
+
     if (title.length < 4 || desc.length < 4) {
       return setCheck(true)
     }
-    setCheck(false)
+    setCheck(false);
 
     const stamp = (Date.now()/1000).toFixed(0);
 
@@ -35,7 +42,6 @@ const Edit = (props) => {
       author: userAuth.userName,
       created_ad: stamp
     };
-
 
     articles.push({...article})
 
@@ -54,6 +60,9 @@ const Edit = (props) => {
 
   };
 
+  const checkFieldEmpty = checkEmpty ? <div className="alert alert-danger" role="alert">
+    поля не должны быть пустыми
+  </div> : null;
   const checkForm = check ? <div className="alert alert-danger" role="alert">
     поля формы должны иметь более 4 символов
   </div> : null;
@@ -85,6 +94,7 @@ const Edit = (props) => {
         <input type="submit" className="btn btn-primary" value="Create"/>
       </form>
       {checkForm}
+      {checkFieldEmpty}
     </div>
   )
 };

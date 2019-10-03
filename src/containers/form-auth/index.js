@@ -2,33 +2,39 @@ import React, {useContext, useState} from "react";
 import {UserContext} from "../context";
 import './form-auth.css'
 
+
+
 const FormAuth = () => {
   const [state, setState] = useContext(UserContext);
   const {users, articles} = state;
   const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
   const [check, setCheck] = useState(false);
+  const [checkEmpty, setCheckEmpty] = useState(false)
   const [checkName, setCheckName] = useState(false);
   const [checkPass, setCheckPass] = useState(false);
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (userName.length < 3 || email.length < 3 || pass.length < 3) {
+    if(userName.trim() === ''|| pass.trim() === '') {
+      return setCheckEmpty(true)
+    }
+    setCheckEmpty(false);
+
+    if (userName.length < 3 || userName.length > 15 ||  pass.length < 3||  pass.length > 15) {
       return setCheck(true)
     }
     setCheck(false);
 
     const item = {
       userName,
-      email,
       pass
     };
 
     // auth
 
-    const idx = users.findIndex(el => el.email.toLowerCase() === item.email.toLowerCase());
+    const idx = users.findIndex(el => el.userName.toLowerCase() === item.userName.toLowerCase());
 
     if (idx >= 0) {
       if(users[idx].userName.toLowerCase() !== item.userName.toLowerCase()) {
@@ -41,7 +47,7 @@ const FormAuth = () => {
       setCheckPass(false);
 
       const newUsers = users.map(el => {
-        if (el.email === item.email) {
+        if (el.userName === item.userName) {
           item.auth = true
         }
         return item;
@@ -61,27 +67,26 @@ const FormAuth = () => {
 
 
     setUserName('');
-    setEmail('');
     setPass('');
   };
   const onSetName = (e) => {
     setUserName(e.target.value)
-  };
-  const onSetEmail = (e) => {
-    setEmail(e.target.value)
   };
   const onSetPass = (e) => {
     setPass(e.target.value)
   };
 
   const warning = check ? <div className="alert alert-danger" role="alert">
-    поля формы должны иметь более 2 символов
+    поля формы должны иметь более 2 символов и не больше 14
   </div> : null;
   const warningName = checkName ? <div className="alert alert-danger" role="alert">
-    такой имейл зарегестрирован, неправильно ввели имя
+    неправильно ввели имя
+  </div> : null;
+  const warningEmpty = checkEmpty ? <div className="alert alert-danger" role="alert">
+    поля не должны быть пустыми или иметь пробелы
   </div> : null;
   const warningPass = checkPass ? <div className="alert alert-danger" role="alert">
-    такой имейл зарегестрирован, неправильно ввели пароль
+    неправильно ввели пароль
   </div> : null;
 
   return (
@@ -91,20 +96,10 @@ const FormAuth = () => {
         type="text"
         id="userName"
         className="form-control"
-        placeholder="Name" required=""
-        autoFocus=""
+        placeholder="Name"
+        required=""
         value={userName}
         onChange={onSetName}
-      />
-      <input
-        type="email"
-        id="inputEmail"
-        className="form-control"
-        placeholder="Email address"
-        required=""
-        autoFocus=""
-        value={email}
-        onChange={onSetEmail}
       />
       <input
         type="password"
@@ -115,12 +110,8 @@ const FormAuth = () => {
         value={pass}
         onChange={onSetPass}
       />
-      <div className="checkbox mb-3">
-        <label>
-          <input type="checkbox" value="remember-me"/> Remember me
-        </label>
-      </div>
       {warning}
+      {warningEmpty}
       {warningName}
       {warningPass}
       <input className="btn btn-lg btn-primary btn-block" type="submit" value="Sign in"/>

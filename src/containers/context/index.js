@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from "react";
 
 const UserContext = React.createContext([{}, () => {
-}])
+}]);
 
-const UserProvider = (props) => {
+const UserProvider = props => {
+  const localStorageState = JSON.parse(localStorage.getItem('state'))
   const [state, setState] = useState({
     userAuth: null,
-    articles: JSON.parse(localStorage.getItem('state')) ? JSON.parse(localStorage.getItem('state')).articles : [],
-    users: JSON.parse(localStorage.getItem('state')) ? JSON.parse(localStorage.getItem('state')).users : []
+    articles: localStorageState ? JSON.parse(localStorage.getItem('state')).articles : [],
+    users: localStorageState ? JSON.parse(localStorage.getItem('state')).users : []
   });
 
   useEffect(() => {

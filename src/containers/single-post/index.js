@@ -9,20 +9,19 @@ const SinglePost = (props) => {
   const {articles, userAuth, users} = state;
   const {match: {params: {id}}, history} = props;
 
+  const article = articles ? articles.find(el => el.created_ad === id) : null;
 
-  const idx = articles ? articles.findIndex(el => el.created_ad === id) : -1;
-  if(idx < 0) {
+  if(!article) {
     return <div className="container"><h2>Post not found</h2></div>
   }
-  const {title, description, author, created_ad} = articles[idx];
+
+  const {title, description, author, created_ad} = article;
   let date = new Date(created_ad * 1000);
   const readDate = getReadDate(date);
 
   const delPost = () => {
-    const newArticles = [
-      ...articles.slice(0, idx),
-      ...articles.slice(idx + 1)
-    ];
+    const newArticles = articles.filter( el => el.title !== article.title || el.desc !== article.desc );
+
     setState(state => ({...state, articles: newArticles}))
     const newState = {
       users,
@@ -33,7 +32,7 @@ const SinglePost = (props) => {
     history.push('/');
   };
 
-  const delButton = userAuth !== null && userAuth.userName === articles[idx].author ? <button type="button" className="btn btn-danger" onClick={delPost}>Delete</button> : null
+  const delButton = userAuth !== null && userAuth.userName === article.author ? <button type="button" className="btn btn-danger" onClick={delPost}>Delete</button> : null
 
 
 
@@ -41,7 +40,7 @@ const SinglePost = (props) => {
     <div className="container">
       <div className="col-12 article">
         <h3 className="title-post">{title}</h3>
-        <p>{description}</p>
+        <p className="post-desc">{description}</p>
         <div className="row">
           <div className="col-6">{author}</div>
           <div className="col-6">{readDate}</div>
