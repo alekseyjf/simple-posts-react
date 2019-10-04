@@ -28,7 +28,7 @@ const Edit = props => {
     }
     setCheckEmpty(false);
 
-    if (title.length < 4 || desc.length < 4) {
+    if (title.length < 4 || title.length > 24 || desc.length < 4) {
       return setCheck(true)
     }
     setCheck(false);
@@ -64,7 +64,7 @@ const Edit = props => {
     поля не должны быть пустыми
   </div> : null;
   const checkForm = check ? <div className="alert alert-danger" role="alert">
-    поля формы должны иметь более 4 символов
+    поля формы должны иметь более 4 символов и title не должен иметь больше 24 символов
   </div> : null;
   // check auth
   if (!userAuth) {

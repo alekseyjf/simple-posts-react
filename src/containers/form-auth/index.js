@@ -21,8 +21,7 @@ const FormAuth = () => {
       return setCheckEmpty(true)
     }
     setCheckEmpty(false);
-
-    if (userName.length < 3 || userName.length > 15 ||  pass.length < 3||  pass.length > 15) {
+    if (userName.length < 3 || userName.length > 14 || pass.length < 3 || pass.length > 14) {
       return setCheck(true)
     }
     setCheck(false);
